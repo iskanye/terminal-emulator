@@ -9,23 +9,24 @@ import (
 )
 
 // Парсер
-func Parser(input string) {
+func Parser(input string) error {
 	parsed := strings.Split(input, " ")
 	if parsed[0] == "exit" {
 		exit()
 	} else {
 		program, exists := programs.Programs[parsed[0]]
 		if !exists {
-			panic("Unknown command")
+			return fmt.Errorf("unknown command")
 		} else {
 			execute(program, parsed[1:])
 		}
 	}
+	return nil
 }
 
 func exit() {
 	fmt.Println("Farewell!")
-	time.Sleep(time.Second)
+	time.Sleep(500 * time.Millisecond)
 	os.Exit(0)
 }
 
