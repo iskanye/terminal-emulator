@@ -10,7 +10,7 @@ import (
 const username string = "iskanye"
 
 func main() {
-	fmt.Print("Welcome to terminal emulator! (~by iskanye~)")
+	fmt.Println("Welcome to terminal emulator! (~by iskanye~)")
 	terminal()
 }
 
