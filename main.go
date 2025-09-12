@@ -10,6 +10,11 @@ import (
 const username string = "iskanye"
 
 func main() {
+	fmt.Print("Welcome to terminal emulator! (~by iskanye~)")
+	terminal()
+}
+
+func terminal() {
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		defer errorHandler()
@@ -20,9 +25,10 @@ func main() {
 	}
 }
 
+// Обработка ошибок
 func errorHandler() {
 	if i := recover(); i != nil {
 		fmt.Println(i)
-		main()
+		terminal()
 	}
 }

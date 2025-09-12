@@ -5,12 +5,14 @@ import (
 	"os"
 	"strings"
 	"terminal-emulator/programs"
+	"time"
 )
 
+// Парсер
 func Parser(input string) {
 	parsed := strings.Split(input, " ")
 	if parsed[0] == "exit" {
-		os.Exit(0)
+		exit()
 	} else {
 		program, exists := programs.Programs[parsed[0]]
 		if !exists {
@@ -19,6 +21,12 @@ func Parser(input string) {
 			execute(program, parsed[1:])
 		}
 	}
+}
+
+func exit() {
+	fmt.Println("Farewell!")
+	time.Sleep(time.Second)
+	os.Exit(0)
 }
 
 func execute(program programs.Program, params []string) {
