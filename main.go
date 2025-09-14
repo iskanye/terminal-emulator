@@ -8,12 +8,14 @@ import (
 )
 
 var username string = "iskanye"
-var vfs string = ""
+var vfs string = "root.xml"
 var startScript string = "start"
 
 func main() {
-	vfs = os.Args[1]
-	startScript = os.Args[2]
+	if len(os.Args) > 1 {
+		vfs = os.Args[1]
+		startScript = os.Args[2]
+	}
 
 	fmt.Println("Welcome to terminal emulator! (~by iskanye~)\n" +
 		"VFS: " + vfs + "\n" +
