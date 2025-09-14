@@ -13,13 +13,15 @@ func ExecuteScript(script string) {
 
 	for {
 		input, err := reader.ReadString('\n')
+		trimmedInput := strings.TrimSpace(input)
+
+		PrintInputField()
+		fmt.Println(trimmedInput)
+		Parser(trimmedInput)
+
 		if err != nil {
 			break
 		}
-
-		PrintInputField()
-		fmt.Print(input)
-		Parser(strings.TrimSpace(input[:len(input)-1]))
 	}
 
 	fmt.Println("\"" + script + "\" executed")

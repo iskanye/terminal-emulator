@@ -12,7 +12,13 @@ var vfs string = ""
 var startScript string = "start"
 
 func main() {
-	fmt.Println("Welcome to terminal emulator! (~by iskanye~)")
+	vfs = os.Args[1]
+	startScript = os.Args[2]
+
+	fmt.Println("Welcome to terminal emulator! (~by iskanye~)\n" +
+		"VFS: " + vfs + "\n" +
+		"Script: " + startScript)
+
 	ExecuteScript(startScript)
 	terminal()
 }
@@ -24,7 +30,7 @@ func terminal() {
 		PrintInputField()
 
 		input, _ := reader.ReadString('\n')
-		err := Parser(strings.TrimSpace(input[:len(input)-1]))
+		err := Parser(strings.TrimSpace(input))
 		if err != nil {
 			fmt.Println(err)
 		}
