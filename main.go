@@ -5,23 +5,25 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"terminal-emulator/vfs"
 )
 
 var username string = "iskanye"
-var vfs string = "root.xml"
+var vfsPath string = "root.xml"
 var startScript string = "start"
 
 func main() {
 	if len(os.Args) > 1 {
-		vfs = os.Args[1]
+		vfsPath = os.Args[1]
 		startScript = os.Args[2]
 	}
 
 	fmt.Println("Welcome to terminal emulator! (~by iskanye~)\n" +
-		"VFS: " + vfs + "\n" +
+		"VFS: " + vfsPath + "\n" +
 		"Script: " + startScript)
 
 	ExecuteScript(startScript)
+	setupVFS()
 	terminal()
 }
 
@@ -41,4 +43,21 @@ func terminal() {
 
 func PrintInputField() {
 	fmt.Print(username + "> ")
+}
+
+func setupVFS() {
+	fs := vfs.NewFileSystem()
+
+	// Создаем директории и файлы
+	fs.Create("/home", true)
+	fs.Create("/home/user", true)
+	fs.Create("/home/user/document.txt", false)
+	fs.Create("/home/user/image.jpg", false)
+	fs.Create("/etc", true)
+	fs.Create("/etc/config.conf", false)
+
+	err := fs.SaveToXML(vfsPath)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
