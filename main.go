@@ -8,9 +8,11 @@ import (
 	"terminal-emulator/vfs"
 )
 
-var username string = "iskanye"
-var vfsPath string = "root.xml"
-var startScript string = "start"
+var (
+	username    = "iskanye"
+	vfsPath     = "root.xml"
+	startScript = "start"
+)
 
 func main() {
 	if len(os.Args) > 1 {
@@ -27,6 +29,7 @@ func main() {
 	terminal()
 }
 
+// Основной цикл эмулятора
 func terminal() {
 	reader := bufio.NewReader(os.Stdin)
 
@@ -46,7 +49,7 @@ func PrintInputField() {
 }
 
 func setupVFS() {
-	fs := vfs.NewFileSystem()
+	fs := vfs.NewRoot()
 
 	// Создаем директории и файлы
 	fs.Create("/home", true)

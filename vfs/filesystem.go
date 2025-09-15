@@ -1,20 +1,24 @@
 package vfs
 
 import (
+	"encoding/base64"
 	"fmt"
 	"path/filepath"
 	"strings"
 )
 
-func NewFileSystem() *Node {
+// Создать новую корневую ветку
+func NewRoot() *Node {
 	root := Node{
 		Name:        "/",
 		IsDirectory: true,
 		Children:    make([]*Node, 0),
+		Parent:      nil,
 	}
 	return &root
 }
 
+// Получить указатель на ноду по её пути в данной ветке
 func (root *Node) GetNode(path string) (*Node, error) {
 	if path == "/" {
 		return root, nil
@@ -47,6 +51,7 @@ func (root *Node) GetNode(path string) (*Node, error) {
 	return current, nil
 }
 
+// Создать ноду в данной ветке
 func (root *Node) Create(path string, isDir bool) error {
 	dir, name := filepath.Split(path)
 	parent, err := root.GetNode(dir)
@@ -79,6 +84,7 @@ func (root *Node) Create(path string, isDir bool) error {
 	return nil
 }
 
+// Удалить ноду данной ветки
 func (root *Node) Delete(path string) error {
 	if path == "/" {
 		return fmt.Errorf("cannot delete root directory")
@@ -100,4 +106,52 @@ func (root *Node) Delete(path string) error {
 	}
 
 	return fmt.Errorf("node not found in parent's children")
+}
+
+// Записать строку в ноду
+func (root *Node) Write(data string) error {
+	if root.IsDirectory {
+		return fmt.Errorf("cannot write to directory")
+	}
+
+	root.Content = data
+	return nil
+}
+
+// Записать байты в ноду
+func (root *Node) WriteBytes(data []byte) error {
+	return root.Write(base64.StdEncoding.EncodeToString(data))
+}
+
+// Прочитать данные с ноды
+func (root *Node) Read() (string, error) {
+	if root.IsDirectory {
+		return "", fmt.Errorf("cannot read from directory")
+	}
+
+	return root.Content, nil
+}
+
+// Прочитать байты с ноды
+func (root *Node) ReadBytes() ([]byte, error) {
+	if root.IsDirectory {
+		return nil, fmt.Errorf("cannot read from directory")
+	}
+
+	data, err := base64.RawStdEncoding.DecodeString(root.Content)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
+// Восстановить указатели на родителей в данной ветке
+func (root *Node) restoreParent(parent *Node) {
+	root.Parent = parent
+
+	for _, i := range root.Children {
+		i.restoreParent(root)
+	}
 }
