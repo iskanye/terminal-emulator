@@ -54,7 +54,7 @@ func (root *Node) Create(path string, isDir bool) error {
 		return fmt.Errorf("parent directory not found: %v", err)
 	}
 
-	if parent.IsDirectory {
+	if !parent.IsDirectory {
 		return fmt.Errorf("%s isn`t a directory", name)
 	}
 
