@@ -14,18 +14,20 @@ var (
 	startScript = "start"
 )
 
+var fileSystem *vfs.Node
+
 func main() {
 	if len(os.Args) > 1 {
 		vfsPath = os.Args[1]
 		startScript = os.Args[2]
 	}
 
+	setupVFS()
 	fmt.Println("Welcome to terminal emulator! (~by iskanye~)\n" +
 		"VFS: " + vfsPath + "\n" +
 		"Script: " + startScript)
 
 	ExecuteScript(startScript)
-	setupVFS()
 	terminal()
 }
 
@@ -60,6 +62,11 @@ func setupVFS() {
 	fs.Create("/etc/config.conf", false)
 
 	err := fs.SaveToXML(vfsPath)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fileSystem, err = vfs.LoadFromXML(vfsPath)
 	if err != nil {
 		fmt.Println(err)
 	}

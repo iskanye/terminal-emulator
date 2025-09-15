@@ -39,8 +39,11 @@ func execute(program programs.Program, params []string) {
 	go execFunc(in, out)
 
 	for i := range out {
-		fmt.Println(i)
+		fmt.Print(i)
+		fmt.Print(" ")
 	}
+
+	fmt.Println()
 }
 
 func transferInput(out chan interface{}, input []string) {

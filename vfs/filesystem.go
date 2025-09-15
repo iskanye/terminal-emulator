@@ -29,14 +29,14 @@ func (root *Node) GetNode(path string) (*Node, error) {
 	parts := strings.Split(path, "/")
 
 	current := root
-	for _, part := range parts {
-		if part == "" {
+	for _, i := range parts {
+		if i == "" {
 			continue
 		}
 
 		found := false
 		for _, child := range current.Children {
-			if child.Name == part {
+			if child.Name == i {
 				current = child
 				found = true
 				break

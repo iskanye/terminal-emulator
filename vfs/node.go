@@ -5,7 +5,7 @@ import "encoding/xml"
 type Node struct {
 	XMLName     xml.Name `xml:"node"`
 	Name        string   `xml:"name,attr"`
-	IsDirectory bool     `xml:"isDirectory,attr"`
+	IsDirectory bool     `xml:"dir,attr"`
 	Content     string   `xml:"content,omitempty"`
 	Children    []*Node  `xml:"node"`
 	Parent      *Node    `xml:"-"`
