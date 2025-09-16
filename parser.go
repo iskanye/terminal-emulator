@@ -16,7 +16,7 @@ func Parser(input string) error {
 	} else {
 		program, exists := programs.Programs[parsed[0]]
 		if !exists {
-			return fmt.Errorf("unknown command")
+			return fmt.Errorf("unknown command: %s", parsed[0])
 		} else {
 			execute(program, parsed[1:])
 		}
@@ -31,31 +31,42 @@ func exit() {
 }
 
 func execute(program programs.Program, params []string) {
-	out := make(chan interface{})
-	in := make(chan interface{})
+	stdin := make(chan string)
+	stdout := make(chan interface{})
+	stderr := make(chan error)
 	execFunc := programFunc(program)
 
-	go transferInput(in, params)
-	go execFunc(in, out)
+	// Поток передачи аргументов
+	go func() {
+		for _, i := range params {
+			stdin <- i
+		}
+		close(stdin)
+	}()
 
-	for i := range out {
-		fmt.Print(i)
-		fmt.Print(" ")
+	go execFunc(stdin, stdout, stderr)
+
+	// Вывод программы
+	go func() {
+		for i := range stdout {
+			fmt.Print(i)
+			fmt.Print(" ")
+		}
+
+		fmt.Println()
+	}()
+
+	// Обработка ошибок
+	if err := <-stderr; err != nil {
+		fmt.Println(err)
 	}
-
-	fmt.Println()
 }
 
-func transferInput(out chan interface{}, input []string) {
-	for _, i := range input {
-		out <- i
-	}
-	close(out)
-}
-
+// Поток программы
 func programFunc(program programs.Program) programs.Program {
-	return func(in, out chan interface{}) {
-		program(in, out)
+	return func(in chan string, out chan interface{}, err chan error) {
+		program(in, out, err)
+		close(err)
 		close(out)
 	}
 }

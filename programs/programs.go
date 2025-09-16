@@ -1,7 +1,11 @@
 // Пакет со всеми доступными встроенными командами
 package programs
 
-type Program func(in, out chan interface{})
+// Исполняемая функции программы:
+// in - входной канал в который поступают аргументы программы;
+// out - выходной канал в который поступает результат работы программы;
+// err - канал исключений, при успешном выполнении в него поступает nil
+type Program func(in chan string, out chan interface{}, err chan error)
 
 // Встроенные команды
 var Programs = map[string]Program{

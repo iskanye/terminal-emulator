@@ -70,4 +70,6 @@ func setupVFS() {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	vfs.SetupExplorer(fileSystem)
 }
