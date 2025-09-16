@@ -29,7 +29,7 @@ func main() {
 	}
 
 	testVFS()
-	fmt.Print("Welcome to terminal emulator! (~by iskanye~)\n" +
+	fmt.Println("Welcome to terminal emulator! (~by iskanye~)\n" +
 		"VFS: " + vfsPath + "\n" +
 		"Script: " + startScript)
 
@@ -47,13 +47,13 @@ func terminal() {
 		input, _ := reader.ReadString('\n')
 		err := Parser(strings.TrimSpace(input))
 		if err != nil {
-			fmt.Print(err)
+			fmt.Println(err)
 		}
 	}
 }
 
 func PrintInputField() {
-	fmt.Print("\n" + username + "> ")
+	fmt.Print(username + "> ")
 }
 
 func setupVFS() error {

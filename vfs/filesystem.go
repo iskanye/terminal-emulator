@@ -10,7 +10,7 @@ import (
 // Создать новую корневую ветку
 func NewRoot() *Node {
 	root := Node{
-		Name:        "/",
+		Name:        "",
 		IsDirectory: true,
 		Children:    make([]*Node, 0),
 		Parent:      nil,

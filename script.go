@@ -33,5 +33,5 @@ func ExecuteScript(script string) {
 		i++
 	}
 
-	fmt.Print("\n\"" + script + "\" executed")
+	fmt.Println("\n\"" + script + "\" executed")
 }

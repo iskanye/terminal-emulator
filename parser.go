@@ -4,24 +4,27 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"sync"
 	"terminal-emulator/programs"
 	"time"
 )
 
 // Парсер
 func Parser(input string) error {
+	wg := sync.WaitGroup{}
 	parsed := strings.Split(input, " ")
+
 	if parsed[0] == "exit" {
 		exit()
+		return nil
 	} else {
 		program, exists := programs.Programs[parsed[0]]
 		if !exists {
 			return fmt.Errorf("unknown command: %s", parsed[0])
 		} else {
-			return execute(program, parsed[1:])
+			return execute(program, parsed[1:], wg)
 		}
 	}
-	return nil
 }
 
 func exit() {
@@ -30,27 +33,40 @@ func exit() {
 	os.Exit(0)
 }
 
-func execute(program programs.Program, params []string) error {
+func execute(program programs.Program, params []string, wg sync.WaitGroup) error {
 	stdin := make(chan string)
 	stdout := make(chan interface{})
 	stderr := make(chan error)
 	execFunc := programFunc(program)
+	wg.Add(3)
 
 	// Поток передачи аргументов
 	go func() {
+		defer wg.Done()
 		for _, i := range params {
 			stdin <- i
 		}
 		close(stdin)
 	}()
 
-	go execFunc(stdin, stdout, stderr)
+	go func() {
+		defer wg.Done()
+		execFunc(stdin, stdout, stderr)
+	}()
 
 	// Вывод программы
 	go func() {
+		defer wg.Done()
+
+		open := false
 		for i := range stdout {
+			open = true
 			fmt.Print(i)
 			fmt.Print(" ")
+		}
+
+		if open {
+			fmt.Println()
 		}
 	}()
 
@@ -58,6 +74,9 @@ func execute(program programs.Program, params []string) error {
 	if err := <-stderr; err != nil {
 		return err
 	}
+
+	// Ожидание завершения всех потоков
+	wg.Wait()
 
 	return nil
 }
