@@ -28,7 +28,6 @@ func main() {
 		return
 	}
 
-	testVFS()
 	fmt.Println("Welcome to terminal emulator! (~by iskanye~)\n" +
 		"VFS: " + vfsPath + "\n" +
 		"Script: " + startScript)
@@ -53,7 +52,7 @@ func terminal() {
 }
 
 func PrintInputField() {
-	fmt.Print(username + "> ")
+	fmt.Print(username + ":" + vfs.FileExplorer.GetPosition() + "> ")
 }
 
 func setupVFS() error {
@@ -65,15 +64,4 @@ func setupVFS() error {
 
 	vfs.SetupExplorer(fileSystem)
 	return nil
-}
-
-func testVFS() {
-	// Создаем директории и файлы
-	fileSystem.Create("/home", true)
-	fileSystem.Create("/home/user", true)
-	fileSystem.Create("/home/user/document.txt", false)
-	fileSystem.Create("/home/user/image.jpg", false)
-	fileSystem.Create("/etc", true)
-	fileSystem.Create("/etc/config.conf", false)
-	fileSystem.SaveToXML(vfsPath)
 }

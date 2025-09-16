@@ -69,6 +69,22 @@ func (exp *Explorer) List() []string {
 	return list
 }
 
+// Получает позицию текущей ноды относительно корневой ноды
+func (exp *Explorer) GetPosition() string {
+	if exp.current.Parent == nil {
+		return "/"
+	}
+
+	position := ""
+	current := exp.current
+	for current.Parent != nil {
+		position = "/" + current.Name + position
+		current = current.Parent
+	}
+
+	return position
+}
+
 // Возвращается в корневую ноду
 func (exp *Explorer) returnToRoot() {
 	for exp.current.Parent != nil {

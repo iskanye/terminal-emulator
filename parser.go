@@ -11,7 +11,6 @@ import (
 
 // Парсер
 func Parser(input string) error {
-	wg := sync.WaitGroup{}
 	parsed := strings.Split(input, " ")
 
 	if parsed[0] == "exit" {
@@ -22,7 +21,7 @@ func Parser(input string) error {
 		if !exists {
 			return fmt.Errorf("unknown command: %s", parsed[0])
 		} else {
-			return execute(program, parsed[1:], wg)
+			return execute(program, parsed[1:])
 		}
 	}
 }
@@ -33,7 +32,8 @@ func exit() {
 	os.Exit(0)
 }
 
-func execute(program programs.Program, params []string, wg sync.WaitGroup) error {
+func execute(program programs.Program, params []string) error {
+	wg := sync.WaitGroup{}
 	stdin := make(chan string)
 	stdout := make(chan interface{})
 	stderr := make(chan error)
