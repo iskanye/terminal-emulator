@@ -7,7 +7,9 @@ import (
 	"strings"
 )
 
+// Исполнить скрипт
 func ExecuteScript(script string) {
+	var i int = 1
 	file, _ := os.Open(script)
 	reader := bufio.NewReader(file)
 
@@ -17,12 +19,19 @@ func ExecuteScript(script string) {
 
 		PrintInputField()
 		fmt.Println(trimmedInput)
-		Parser(trimmedInput)
+
+		parserErr := Parser(trimmedInput)
+		if parserErr != nil {
+			fmt.Print(fmt.Sprintf("line %d: ", i), parserErr)
+			break
+		}
 
 		if err != nil {
 			break
 		}
+
+		i++
 	}
 
-	fmt.Println("\"" + script + "\" executed")
+	fmt.Print("\n\"" + script + "\" executed")
 }

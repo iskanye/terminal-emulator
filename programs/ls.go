@@ -13,6 +13,7 @@ func Ls(in chan string, out chan interface{}, err chan error) {
 
 	for _, i := range args {
 		err <- fmt.Errorf("unknown argument: %s", i)
+		return
 	}
 
 	result := vfs.FileExplorer.List()

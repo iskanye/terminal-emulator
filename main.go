@@ -22,8 +22,14 @@ func main() {
 		startScript = os.Args[2]
 	}
 
-	setupVFS()
-	fmt.Println("Welcome to terminal emulator! (~by iskanye~)\n" +
+	err := setupVFS()
+	if err != nil {
+		fmt.Print(err)
+		return
+	}
+
+	testVFS()
+	fmt.Print("Welcome to terminal emulator! (~by iskanye~)\n" +
 		"VFS: " + vfsPath + "\n" +
 		"Script: " + startScript)
 
@@ -41,35 +47,33 @@ func terminal() {
 		input, _ := reader.ReadString('\n')
 		err := Parser(strings.TrimSpace(input))
 		if err != nil {
-			fmt.Println(err)
+			fmt.Print(err)
 		}
 	}
 }
 
 func PrintInputField() {
-	fmt.Print(username + "> ")
+	fmt.Print("\n" + username + "> ")
 }
 
-func setupVFS() {
-	fs := vfs.NewRoot()
-
-	// Создаем директории и файлы
-	fs.Create("/home", true)
-	fs.Create("/home/user", true)
-	fs.Create("/home/user/document.txt", false)
-	fs.Create("/home/user/image.jpg", false)
-	fs.Create("/etc", true)
-	fs.Create("/etc/config.conf", false)
-
-	err := fs.SaveToXML(vfsPath)
+func setupVFS() error {
+	fs, err := vfs.LoadFromXML(vfsPath)
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
-
-	fileSystem, err = vfs.LoadFromXML(vfsPath)
-	if err != nil {
-		fmt.Println(err)
-	}
+	fileSystem = fs
 
 	vfs.SetupExplorer(fileSystem)
+	return nil
+}
+
+func testVFS() {
+	// Создаем директории и файлы
+	fileSystem.Create("/home", true)
+	fileSystem.Create("/home/user", true)
+	fileSystem.Create("/home/user/document.txt", false)
+	fileSystem.Create("/home/user/image.jpg", false)
+	fileSystem.Create("/etc", true)
+	fileSystem.Create("/etc/config.conf", false)
+	fileSystem.SaveToXML(vfsPath)
 }

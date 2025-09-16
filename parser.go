@@ -18,7 +18,7 @@ func Parser(input string) error {
 		if !exists {
 			return fmt.Errorf("unknown command: %s", parsed[0])
 		} else {
-			execute(program, parsed[1:])
+			return execute(program, parsed[1:])
 		}
 	}
 	return nil
@@ -30,7 +30,7 @@ func exit() {
 	os.Exit(0)
 }
 
-func execute(program programs.Program, params []string) {
+func execute(program programs.Program, params []string) error {
 	stdin := make(chan string)
 	stdout := make(chan interface{})
 	stderr := make(chan error)
@@ -52,21 +52,21 @@ func execute(program programs.Program, params []string) {
 			fmt.Print(i)
 			fmt.Print(" ")
 		}
-
-		fmt.Println()
 	}()
 
 	// Обработка ошибок
 	if err := <-stderr; err != nil {
-		fmt.Println(err)
+		return err
 	}
+
+	return nil
 }
 
 // Поток программы
 func programFunc(program programs.Program) programs.Program {
 	return func(in chan string, out chan interface{}, err chan error) {
 		program(in, out, err)
-		close(err)
 		close(out)
+		close(err)
 	}
 }
