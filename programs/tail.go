@@ -18,7 +18,7 @@ func Tail(in chan string, out chan interface{}, stderr chan error) {
 		stderr <- fmt.Errorf("no args")
 		return
 	} else if len(args) > 1 && len(args) < 4 {
-		argv, err := ExtractArgs(args[:len(args)-1])
+		argv, err := ExtractArgv(args[:len(args)-1])
 		if err != nil {
 			stderr <- err
 			return
@@ -60,7 +60,7 @@ func Tail(in chan string, out chan interface{}, stderr chan error) {
 	lines := strings.Split(content, "\n")
 
 	if len(lines) <= n {
-		out <- content
+		out <- strings.TrimSpace(content)
 	} else {
 		for i := n; i > 0; i-- {
 			out <- lines[len(lines)-i-1]

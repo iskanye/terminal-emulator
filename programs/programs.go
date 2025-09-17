@@ -18,10 +18,11 @@ var Programs = map[string]Program{
 	"cd":   Cd,
 	"du":   Du,
 	"tail": Tail,
+	"cat":  Cat,
 }
 
-// Функция извлечения параметров
-func ExtractArgs(args []string) (map[string]string, error) {
+// Функция извлечения именованных параметров
+func ExtractArgv(args []string) (map[string]string, error) {
 	if len(args)%2 != 0 {
 		return nil, fmt.Errorf("wrong number of args")
 	}
