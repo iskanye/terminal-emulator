@@ -69,6 +69,22 @@ func (exp *Explorer) List() []string {
 	return list
 }
 
+// Получает текстовый список нод в данной директории
+func (exp *Explorer) ListDir(path string) ([]string, error) {
+	dir, err := exp.current.GetNode(path)
+	if err != nil {
+		return nil, err
+	}
+
+	list := make([]string, 0)
+
+	for _, i := range dir.Children {
+		list = append(list, i.Name)
+	}
+
+	return list, nil
+}
+
 // Получает позицию текущей ноды относительно корневой ноды
 func (exp *Explorer) GetPosition() string {
 	if exp.current.Parent == nil {

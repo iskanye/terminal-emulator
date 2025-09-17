@@ -5,21 +5,30 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Ls(in chan string, out chan interface{}, err chan error) {
+func Ls(in chan string, out chan interface{}, stderr chan error) {
+	var result []string
 	args := make([]string, 0)
 	for i := range in {
 		args = append(args, i)
 	}
 
-	for _, i := range args {
-		err <- fmt.Errorf("unknown argument: %s", i)
+	if len(args) > 1 {
+		stderr <- fmt.Errorf("too many arguments")
 		return
+	} else if len(args) == 1 {
+		var err error
+		result, err = vfs.FileExplorer.ListDir(args[0])
+		if err != nil {
+			stderr <- err
+			return
+		}
+	} else {
+		result = vfs.FileExplorer.List()
 	}
 
-	result := vfs.FileExplorer.List()
 	for _, i := range result {
-		out <- i + " "
+		out <- i
 	}
 
-	err <- nil
+	stderr <- nil
 }
