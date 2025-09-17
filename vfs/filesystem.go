@@ -147,6 +147,19 @@ func (root *Node) ReadBytes() ([]byte, error) {
 	return data, nil
 }
 
+// Размер ноды в байтах
+func (root *Node) GetSize() int {
+	if !root.IsDirectory {
+		return len(root.Content)
+	}
+
+	size := 0
+	for _, i := range root.Children {
+		size += i.GetSize()
+	}
+	return size
+}
+
 // Восстановить указатели на родителей в данной ветке
 func (root *Node) restoreParent(parent *Node) {
 	root.Parent = parent

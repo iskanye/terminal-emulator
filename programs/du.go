@@ -5,7 +5,7 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Ls(in chan string, out chan interface{}, err chan error) {
+func Du(in chan string, out chan interface{}, err chan error) {
 	args := make([]string, 0)
 	for i := range in {
 		args = append(args, i)
@@ -16,9 +16,9 @@ func Ls(in chan string, out chan interface{}, err chan error) {
 		return
 	}
 
-	result := vfs.FileExplorer.List()
-	for _, i := range result {
-		out <- i + " "
+	for _, i := range vfs.FileExplorer.GetCurrent().Children {
+		output := fmt.Sprintf("%d\t%s", i.GetSize(), i.Name)
+		out <- output
 	}
 
 	err <- nil

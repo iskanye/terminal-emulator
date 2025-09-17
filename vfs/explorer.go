@@ -85,6 +85,11 @@ func (exp *Explorer) GetPosition() string {
 	return position
 }
 
+// Текущая нода
+func (exp *Explorer) GetCurrent() *Node {
+	return exp.current
+}
+
 // Возвращается в корневую ноду
 func (exp *Explorer) returnToRoot() {
 	for exp.current.Parent != nil {

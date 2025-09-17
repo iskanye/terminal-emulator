@@ -10,7 +10,14 @@ import (
 // Исполнить скрипт
 func ExecuteScript(script string) {
 	var i int = 1
-	file, _ := os.Open(script)
+	file, err := os.Open(script)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer file.Close()
+
 	reader := bufio.NewReader(file)
 
 	for {
@@ -22,7 +29,7 @@ func ExecuteScript(script string) {
 
 		parserErr := Parser(trimmedInput)
 		if parserErr != nil {
-			fmt.Print(fmt.Sprintf("line %d: ", i), parserErr)
+			fmt.Println(fmt.Sprintf("line %d: ", i), parserErr)
 			break
 		}
 
@@ -33,5 +40,5 @@ func ExecuteScript(script string) {
 		i++
 	}
 
-	fmt.Println("\n\"" + script + "\" executed")
+	fmt.Println("\"" + script + "\" executed")
 }

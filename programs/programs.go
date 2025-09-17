@@ -11,4 +11,5 @@ type Program func(in chan string, out chan interface{}, err chan error)
 var Programs = map[string]Program{
 	"ls": Ls,
 	"cd": Cd,
+	"du": Du,
 }

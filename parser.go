@@ -58,15 +58,8 @@ func execute(program programs.Program, params []string) error {
 	go func() {
 		defer wg.Done()
 
-		open := false
 		for i := range stdout {
-			open = true
-			fmt.Print(i)
-			fmt.Print(" ")
-		}
-
-		if open {
-			fmt.Println()
+			fmt.Println(i)
 		}
 	}()
 

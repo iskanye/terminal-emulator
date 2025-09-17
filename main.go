@@ -16,6 +16,11 @@ var (
 
 var fileSystem *vfs.Node
 
+// Поле ввода
+func PrintInputField() {
+	fmt.Print(username + ":" + vfs.FileExplorer.GetPosition() + "> ")
+}
+
 func main() {
 	if len(os.Args) > 1 {
 		vfsPath = os.Args[1]
@@ -49,10 +54,6 @@ func terminal() {
 			fmt.Println(err)
 		}
 	}
-}
-
-func PrintInputField() {
-	fmt.Print(username + ":" + vfs.FileExplorer.GetPosition() + "> ")
 }
 
 func setupVFS() error {
