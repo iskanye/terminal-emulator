@@ -14,11 +14,12 @@ type Program func(in chan string, out chan interface{}, err chan error)
 
 // Встроенные команды
 var Programs = map[string]Program{
-	"ls":   Ls,
-	"cd":   Cd,
-	"du":   Du,
-	"tail": Tail,
-	"cat":  Cat,
+	"ls":    Ls,
+	"cd":    Cd,
+	"du":    Du,
+	"tail":  Tail,
+	"cat":   Cat,
+	"touch": Touch,
 }
 
 // Функция извлечения именованных параметров

@@ -1,6 +1,9 @@
 package vfs
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 type Explorer struct {
 	current *Node
@@ -50,12 +53,26 @@ func (exp *Explorer) Travel(path string) error {
 // Возвращает файл из текущей директории
 func (exp *Explorer) GetFile(name string) (*Node, error) {
 	for _, i := range exp.current.Children {
-		if i.Name == name {
+		if i.Name == name && i.IsDirectory {
+			return nil, fmt.Errorf("not a file: %s", name)
+		} else if i.Name == name && !i.IsDirectory {
 			return i, nil
 		}
 	}
 
 	return nil, fmt.Errorf("can`t find file: %s", name)
+}
+
+// Создать ноду в текущей директории
+func (exp *Explorer) AddNode(name string, isDir bool) {
+	node := &Node{
+		Name:        name,
+		IsDirectory: isDir,
+		Parent:      exp.current,
+		Modified:    time.Now(),
+	}
+
+	exp.current.Children = append(exp.current.Children, node)
 }
 
 // Получает текстовый список нод в текущей директории

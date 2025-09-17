@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 // Создать новую корневую ветку
@@ -74,6 +75,7 @@ func (root *Node) Create(path string, isDir bool) error {
 		Name:        name,
 		Parent:      parent,
 		IsDirectory: isDir,
+		Modified:    time.Now(),
 	}
 	if isDir {
 		node.Children = make([]*Node, 0)
@@ -115,6 +117,7 @@ func (root *Node) Write(data string) error {
 	}
 
 	root.Content = data
+	root.Modified = time.Now()
 	return nil
 }
 
