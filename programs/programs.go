@@ -22,6 +22,17 @@ var Programs = map[string]Program{
 	"touch": Touch,
 	"rmdir": Rmdir,
 	"mkdir": Mkdir,
+	"help":  Help,
+}
+
+// Получет аргументы из канала
+func ExtractArgs(stdin chan string) []string {
+	args := make([]string, 0)
+	for i := range stdin {
+		args = append(args, i)
+	}
+
+	return args
 }
 
 // Функция извлечения именованных параметров

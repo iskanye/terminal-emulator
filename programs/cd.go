@@ -6,10 +6,7 @@ import (
 )
 
 func Cd(in chan string, out chan interface{}, err chan error) {
-	args := make([]string, 0)
-	for i := range in {
-		args = append(args, i)
-	}
+	args := ExtractArgs(in)
 
 	if len(args) == 0 {
 		err <- fmt.Errorf("no args")

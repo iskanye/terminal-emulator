@@ -6,10 +6,7 @@ import (
 )
 
 func Mkdir(in chan string, out chan interface{}, stderr chan error) {
-	args := make([]string, 0)
-	for i := range in {
-		args = append(args, i)
-	}
+	args := ExtractArgs(in)
 
 	if len(args) == 0 {
 		stderr <- fmt.Errorf("no args")

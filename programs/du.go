@@ -6,13 +6,10 @@ import (
 )
 
 func Du(in chan string, out chan interface{}, err chan error) {
-	args := make([]string, 0)
-	for i := range in {
-		args = append(args, i)
-	}
+	args := ExtractArgs(in)
 
-	for _, i := range args {
-		err <- fmt.Errorf("unknown argument: %s", i)
+	if len(args) > 0 {
+		err <- fmt.Errorf("too many arguments")
 		return
 	}
 

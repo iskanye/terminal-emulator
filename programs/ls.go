@@ -7,10 +7,7 @@ import (
 
 func Ls(in chan string, out chan interface{}, stderr chan error) {
 	var result []string
-	args := make([]string, 0)
-	for i := range in {
-		args = append(args, i)
-	}
+	args := ExtractArgs(in)
 
 	if len(args) > 1 {
 		stderr <- fmt.Errorf("too many arguments")
