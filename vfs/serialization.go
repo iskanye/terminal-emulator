@@ -9,7 +9,12 @@ import (
 func LoadFromXML(file string) (*Node, error) {
 	xmlData, err := os.ReadFile(file)
 	if err != nil {
-		return nil, err
+		_, err = os.Create(file)
+		if err != nil {
+			return nil, err
+		}
+
+		return NewRoot(), nil
 	}
 
 	root := &Node{}

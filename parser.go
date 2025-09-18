@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync"
 	"terminal-emulator/programs"
+	"terminal-emulator/vfs"
 	"time"
 )
 
@@ -27,6 +28,7 @@ func Parser(input string) error {
 }
 
 func exit() {
+	vfs.FileExplorer.Save(vfsPath)
 	fmt.Println("Farewell!")
 	time.Sleep(500 * time.Millisecond)
 	os.Exit(0)

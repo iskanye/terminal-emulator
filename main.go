@@ -14,8 +14,6 @@ var (
 	startScript = "start"
 )
 
-var fileSystem *vfs.Node
-
 // Поле ввода
 func PrintInputField() {
 	fmt.Print(username + ":" + vfs.FileExplorer.GetPosition() + "> ")
@@ -61,8 +59,6 @@ func setupVFS() error {
 	if err != nil {
 		return err
 	}
-	fileSystem = fs
-
-	vfs.SetupExplorer(fileSystem)
+	vfs.SetupExplorer(fs)
 	return nil
 }

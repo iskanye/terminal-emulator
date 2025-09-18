@@ -21,12 +21,11 @@ func NewRoot() *Node {
 
 // Получить указатель на ноду по её пути в данной ветке
 func (root *Node) GetNode(path string) (*Node, error) {
-	if path == "/" {
+	if path == "" {
 		return root, nil
 	}
 
-	// Нормализуем путь
-	path = strings.Trim(path, "/")
+	// Разделяем путь
 	parts := strings.Split(path, "/")
 
 	current := root
@@ -86,28 +85,22 @@ func (root *Node) Create(path string, isDir bool) error {
 	return nil
 }
 
-// Удалить ноду данной ветки
-func (root *Node) Delete(path string) error {
-	if path == "/" {
+// Удалить данную ноду
+func (root *Node) Delete() error {
+	parent := root.Parent
+	if parent == nil {
 		return fmt.Errorf("cannot delete root directory")
 	}
 
-	node, err := root.GetNode(path)
-	if err != nil {
-		return err
-	}
-
-	parent := node.Parent
-
 	// Удаляем узел из родительского списка детей
 	for i, child := range parent.Children {
-		if child == node {
+		if child == root {
 			parent.Children = append(parent.Children[:i], parent.Children[i+1:]...)
 			return nil
 		}
 	}
 
-	return fmt.Errorf("node not found in parent's children")
+	return nil
 }
 
 // Записать строку в ноду

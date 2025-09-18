@@ -2,11 +2,13 @@ package vfs
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
 type Explorer struct {
 	current *Node
+	root    *Node
 }
 
 // Экземпляр просмотрщика файловой системы
@@ -16,6 +18,7 @@ var FileExplorer Explorer
 func SetupExplorer(root *Node) {
 	FileExplorer = Explorer{
 		current: root,
+		root:    root,
 	}
 }
 
@@ -61,6 +64,16 @@ func (exp *Explorer) GetFile(name string) (*Node, error) {
 	}
 
 	return nil, fmt.Errorf("can`t find file: %s", name)
+}
+
+// Возвращает ноду в текущей файловой системе
+func (exp *Explorer) GetNode(path string) (*Node, error) {
+	current := exp.current
+	if path[0] == '/' {
+		current = exp.root
+	}
+
+	return current.GetNode(strings.Trim(path, "/"))
 }
 
 // Создать ноду в текущей директории
@@ -123,9 +136,12 @@ func (exp *Explorer) GetCurrent() *Node {
 	return exp.current
 }
 
+// Сохранить файловую систему в файл
+func (exp *Explorer) Save(path string) {
+	exp.root.SaveToXML(path)
+}
+
 // Возвращается в корневую ноду
 func (exp *Explorer) returnToRoot() {
-	for exp.current.Parent != nil {
-		exp.current = exp.current.Parent
-	}
+	exp.current = exp.root
 }
