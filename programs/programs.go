@@ -21,6 +21,7 @@ var Programs = map[string]Program{
 	"cat":   Cat,
 	"touch": Touch,
 	"rmdir": Rmdir,
+	"mkdir": Mkdir,
 }
 
 // Функция извлечения именованных параметров

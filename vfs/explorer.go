@@ -77,15 +77,27 @@ func (exp *Explorer) GetNode(path string) (*Node, error) {
 }
 
 // Создать ноду в текущей директории
-func (exp *Explorer) AddNode(name string, isDir bool) {
+func (exp *Explorer) AddNode(name string, isDir bool) error {
+	// Проверяем, существует ли уже элемент с таким именем
+	for _, child := range exp.current.Children {
+		if child.Name == name {
+			return fmt.Errorf("file or directory already exists: %s", name)
+		}
+	}
+
 	node := &Node{
 		Name:        name,
-		IsDirectory: isDir,
 		Parent:      exp.current,
+		IsDirectory: isDir,
 		Modified:    time.Now(),
+	}
+	if isDir {
+		node.Children = make([]*Node, 0)
 	}
 
 	exp.current.Children = append(exp.current.Children, node)
+
+	return nil
 }
 
 // Получает текстовый список нод в текущей директории

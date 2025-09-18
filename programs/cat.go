@@ -31,7 +31,9 @@ func Cat(in chan string, out chan interface{}, stderr chan error) {
 				return
 			}
 
-			out <- strings.TrimSpace(content)
+			if content != "" {
+				out <- strings.TrimSpace(content)
+			}
 		}
 	}
 

@@ -3,7 +3,6 @@ package vfs
 import (
 	"encoding/base64"
 	"fmt"
-	"path/filepath"
 	"strings"
 	"time"
 )
@@ -49,40 +48,6 @@ func (root *Node) GetNode(path string) (*Node, error) {
 	}
 
 	return current, nil
-}
-
-// Создать ноду в данной ветке
-func (root *Node) Create(path string, isDir bool) error {
-	dir, name := filepath.Split(path)
-	parent, err := root.GetNode(dir)
-	if err != nil {
-		return fmt.Errorf("directory not found: %v", err)
-	}
-
-	if !parent.IsDirectory {
-		return fmt.Errorf("%s isn`t a directory", name)
-	}
-
-	// Проверяем, существует ли уже элемент с таким именем
-	for _, child := range parent.Children {
-		if child.Name == name {
-			return fmt.Errorf("file or directory already exists: %s", name)
-		}
-	}
-
-	node := &Node{
-		Name:        name,
-		Parent:      parent,
-		IsDirectory: isDir,
-		Modified:    time.Now(),
-	}
-	if isDir {
-		node.Children = make([]*Node, 0)
-	}
-
-	parent.Children = append(parent.Children, node)
-
-	return nil
 }
 
 // Удалить данную ноду
