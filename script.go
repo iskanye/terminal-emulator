@@ -13,7 +13,7 @@ func ExecuteScript(script string) {
 	file, err := os.Open(script)
 
 	if err != nil {
-		fmt.Println(err)
+		Println(err)
 		return
 	}
 	defer file.Close()

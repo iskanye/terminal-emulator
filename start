@@ -1,7 +1,8 @@
-ls
 cd home
-ls
 cd user
 ls 
-tail -n 30 document.txt
+tail -n 5 document.txt
+cat document.txt
+du
+cd /
 du
