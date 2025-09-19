@@ -1,11 +1,10 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
 	"os"
-	"strings"
 	"terminal-emulator/vfs"
+
+	"gioui.org/app"
 )
 
 var (
@@ -14,9 +13,19 @@ var (
 	startScript = "start"
 )
 
+var terminal *Terminal
+
+func Print(a interface{}) {
+	terminal.Print(a)
+}
+
+func Println(a interface{}) {
+	terminal.Println(a)
+}
+
 // Поле ввода
 func PrintInputField() {
-	fmt.Print(username + ":" + vfs.FileExplorer.GetPosition() + "> ")
+	Print(username + ":" + vfs.FileExplorer.GetPosition() + "> ")
 }
 
 func main() {
@@ -25,33 +34,23 @@ func main() {
 		startScript = os.Args[2]
 	}
 
+	terminal = NewTerminal("VFS: " + vfsPath)
+	go terminal.Main()
+
 	err := setupVFS()
 	if err != nil {
-		fmt.Print(err)
+		Print(err)
 		return
 	}
 
-	fmt.Println("Welcome to terminal emulator! (~by iskanye~)\n" +
+	Println("Welcome to terminal emulator! (~by iskanye~)\n" +
 		"VFS: " + vfsPath + "\n" +
 		"Script: " + startScript)
 
 	ExecuteScript(startScript)
-	terminal()
-}
+	PrintInputField()
 
-// Основной цикл эмулятора
-func terminal() {
-	reader := bufio.NewReader(os.Stdin)
-
-	for {
-		PrintInputField()
-
-		input, _ := reader.ReadString('\n')
-		err := Parser(strings.TrimSpace(input))
-		if err != nil {
-			fmt.Println(err)
-		}
-	}
+	app.Main()
 }
 
 func setupVFS() error {
@@ -61,4 +60,9 @@ func setupVFS() error {
 	}
 	vfs.SetupExplorer(fs)
 	return nil
+}
+
+func exit() {
+	vfs.FileExplorer.Save(vfsPath)
+	os.Exit(0)
 }

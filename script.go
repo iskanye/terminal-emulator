@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 )
 
 // Исполнить скрипт
@@ -22,12 +21,11 @@ func ExecuteScript(script string) {
 
 	for {
 		input, err := reader.ReadString('\n')
-		trimmedInput := strings.TrimSpace(input)
 
 		PrintInputField()
-		fmt.Println(trimmedInput)
+		Print(input)
 
-		parserErr := Parser(trimmedInput)
+		parserErr := Parser(input)
 		if parserErr != nil {
 			fmt.Println(fmt.Sprintf("line %d: ", i), parserErr)
 			break
@@ -40,5 +38,5 @@ func ExecuteScript(script string) {
 		i++
 	}
 
-	fmt.Println("\"" + script + "\" executed")
+	Println("\"" + script + "\" executed")
 }

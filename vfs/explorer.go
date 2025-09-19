@@ -24,7 +24,7 @@ func SetupExplorer(root *Node) {
 
 // Перемещение по файловой системе
 func (exp *Explorer) Travel(path string) error {
-	if path == "." {
+	if path == "." || path == "" {
 		return nil
 	}
 	if path == ".." && exp.current.Parent == nil {

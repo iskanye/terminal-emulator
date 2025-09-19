@@ -2,16 +2,14 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"strings"
 	"sync"
 	"terminal-emulator/programs"
-	"terminal-emulator/vfs"
-	"time"
 )
 
 // Парсер
 func Parser(input string) error {
+	input = strings.TrimSpace(input)
 	parsed := strings.Split(input, " ")
 
 	if parsed[0] == "exit" {
@@ -25,13 +23,6 @@ func Parser(input string) error {
 			return execute(program, parsed[1:])
 		}
 	}
-}
-
-func exit() {
-	vfs.FileExplorer.Save(vfsPath)
-	fmt.Println("Farewell!")
-	time.Sleep(500 * time.Millisecond)
-	os.Exit(0)
 }
 
 func execute(program programs.Program, params []string) error {
@@ -61,7 +52,7 @@ func execute(program programs.Program, params []string) error {
 		defer wg.Done()
 
 		for i := range stdout {
-			fmt.Println(i)
+			Println(i)
 		}
 	}()
 

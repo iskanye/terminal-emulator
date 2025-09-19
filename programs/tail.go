@@ -54,13 +54,15 @@ func Tail(in chan string, out chan interface{}, stderr chan error) {
 		return
 	}
 
-	lines := strings.Split(content, "\n")
+	if content != "" {
+		lines := strings.Split(content, "\n")
 
-	if len(lines) <= n {
-		out <- strings.TrimSpace(content)
-	} else {
-		for i := n; i > 0; i-- {
-			out <- lines[len(lines)-i-1]
+		if len(lines) <= n {
+			out <- strings.TrimSpace(content)
+		} else {
+			for i := n; i > 0; i-- {
+				out <- lines[len(lines)-i-1]
+			}
 		}
 	}
 

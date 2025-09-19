@@ -1,8 +1,7 @@
 package programs
 
 import (
-	"bufio"
-	"os"
+	"fmt"
 	"strings"
 	"terminal-emulator/vfs"
 )
@@ -11,9 +10,8 @@ func Cat(in chan string, out chan interface{}, stderr chan error) {
 	args := ExtractArgs(in)
 
 	if len(args) == 0 {
-		reader := bufio.NewReader(os.Stdin)
-		result, _ := reader.ReadString('\n')
-		out <- strings.TrimSpace(result)
+		stderr <- fmt.Errorf("no args")
+		return
 	} else {
 		for _, i := range args {
 			file, err := vfs.FileExplorer.GetFile(i)
