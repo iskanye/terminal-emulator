@@ -9,7 +9,6 @@ import (
 
 // Парсер
 func Parser(input string) error {
-	input = strings.TrimSpace(input)
 	parsed := strings.Split(input, " ")
 
 	if parsed[0] == "exit" {

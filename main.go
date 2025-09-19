@@ -48,8 +48,6 @@ func main() {
 		"Script: " + startScript)
 
 	ExecuteScript(startScript)
-	PrintInputField()
-
 	app.Main()
 }
 

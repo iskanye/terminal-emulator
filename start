@@ -4,3 +4,4 @@ ls
 cd user
 ls 
 tail -n 30 document.txt
+du

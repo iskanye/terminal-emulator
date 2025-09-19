@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 // Исполнить скрипт
@@ -21,9 +22,10 @@ func ExecuteScript(script string) {
 
 	for {
 		input, err := reader.ReadString('\n')
+		input = strings.TrimSpace(input)
 
 		PrintInputField()
-		Print(input)
+		Println(input)
 
 		parserErr := Parser(input)
 		if parserErr != nil {
@@ -39,4 +41,5 @@ func ExecuteScript(script string) {
 	}
 
 	Println("\"" + script + "\" executed")
+	PrintInputField()
 }
