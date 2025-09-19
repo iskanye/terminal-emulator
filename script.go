@@ -27,7 +27,7 @@ func ExecuteScript(script string) {
 
 		parserErr := Parser(input)
 		if parserErr != nil {
-			fmt.Println(fmt.Sprintf("line %d: ", i), parserErr)
+			Println(fmt.Sprintf("line %d: ", i) + " " + fmt.Sprint(parserErr))
 			break
 		}
 

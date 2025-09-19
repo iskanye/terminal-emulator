@@ -14,7 +14,7 @@ func Du(in chan string, out chan interface{}, err chan error) {
 	}
 
 	for _, i := range vfs.FileExplorer.GetCurrent().Children {
-		output := fmt.Sprintf("%d\t%s", i.GetSize(), i.Name)
+		output := fmt.Sprintf("%d    %s", i.GetSize(), i.Name)
 		out <- output
 	}
 

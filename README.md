@@ -8,6 +8,7 @@
 * Команды `ls`, `cd`, `exit`, `du`, `tail`, `cat`, `touch`, `rmdir`, `mkdir` и `help`
 * Возможность настройки местоположения файловой системы и стартового скрипта
 * Виртуальная файловая система на основе xml-файла
+* Графический интерфейс
 
 ## Сборка и запуск
 
@@ -16,7 +17,7 @@
 ```bash
 git clone https://github.com/iskanye/terminal-emulator
 cd terminal-emulator
-go build
+go build -ldflags -H=windowsgui
 ```
 
 После запустить получившийся exe файл
@@ -30,6 +31,10 @@ go build
 ```bash
 .\terminal-emulator.exe root.xml start
 ```
+
+## Используемые библиотеки
+
+[Gioui](https://gioui.org/) - современная кроссплатформенная библиотека для написания графического интерфейса на Go.
 
 ## Лицензия
 
