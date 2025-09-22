@@ -9,6 +9,7 @@ import (
 
 // Исполнить скрипт
 func ExecuteScript(script string) {
+	defer PrintInputField()
 	var i int = 1
 	file, err := os.Open(script)
 
@@ -41,5 +42,4 @@ func ExecuteScript(script string) {
 	}
 
 	Println("\"" + script + "\" executed")
-	PrintInputField()
 }

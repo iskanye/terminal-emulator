@@ -17,7 +17,7 @@ func Mkdir(in chan string, out chan interface{}, stderr chan error) {
 		return
 	}
 
-	err := vfs.FileExplorer.AddNode(args[0], false)
+	err := vfs.FileExplorer.AddNode(args[0], true)
 	if err != nil {
 		stderr <- err
 		return

@@ -2,7 +2,11 @@ cd home
 cd user
 ls 
 tail -n 5 document.txt
+tail document.txt
 cat document.txt
 du
 cd /
 du
+help
+mkdir cat_dir
+ls
