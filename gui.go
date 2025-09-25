@@ -14,6 +14,7 @@ import (
 	"gioui.org/widget/material"
 )
 
+// Структура графического интерфейса
 type Terminal struct {
 	windowTitle  string
 	theme        *material.Theme
@@ -23,8 +24,10 @@ type Terminal struct {
 	ops          op.Ops
 	history      []string
 	historyIndex int
+	buffer       chan string
 }
 
+// Создать новый терминал
 func NewTerminal(title string) *Terminal {
 	theme := material.NewTheme()
 	theme.Shaper = text.NewShaper(text.WithCollection(gofont.Collection()))
@@ -35,6 +38,7 @@ func NewTerminal(title string) *Terminal {
 	}
 
 	t.history = make([]string, 0)
+	t.buffer = make(chan string)
 
 	t.inputField.SingleLine = true
 	t.inputField.Submit = true
@@ -43,15 +47,18 @@ func NewTerminal(title string) *Terminal {
 	return t
 }
 
+// Вывести текст в поле вывода
 func (t *Terminal) Print(a interface{}) {
 	t.outputField.SetText(t.outputField.Text() + fmt.Sprint(a))
 	t.outputField.MoveCaret(len(t.outputField.Text()), len(t.outputField.Text()))
 }
 
+// Вывести текст в поле вывода
 func (t *Terminal) Println(a interface{}) {
 	t.Print(fmt.Sprint(a) + "\n")
 }
 
+// Основной цикл программы
 func (t *Terminal) Main() {
 	w := new(app.Window)
 	w.Option(app.Title(t.windowTitle),
@@ -65,7 +72,7 @@ func (t *Terminal) Main() {
 
 			// Обрабатываем нажатие кнопки
 			if t.sendButton.Clicked(gtx) {
-				t.execute()
+				t.writeToBuffer()
 			}
 
 			// Обрабатываем SubmitEvent
@@ -75,7 +82,7 @@ func (t *Terminal) Main() {
 					break
 				}
 				if _, ok := inputEvent.(widget.SubmitEvent); ok {
-					t.execute()
+					t.writeToBuffer()
 				}
 			}
 
@@ -106,14 +113,19 @@ func (t *Terminal) Main() {
 
 }
 
-func (t *Terminal) execute() {
+// Получить ввод пользователя
+func (t *Terminal) Read() string {
+	return <-t.buffer
+}
+
+// Записывает данные из поля ввода в буфер
+func (t *Terminal) writeToBuffer() {
 	text := t.inputField.Text()
 	if text == "" {
 		return
 	}
 
 	t.inputField.SetText("")
-	t.Println(text)
 
 	// Добавляем в историю
 	history := make([]string, 1)
@@ -122,14 +134,10 @@ func (t *Terminal) execute() {
 	t.history = history
 	t.historyIndex = 0
 
-	err := Parser(text)
-	if err != nil {
-		t.Println(err)
-	}
-
-	PrintInputField()
+	t.buffer <- text
 }
 
+// Отрисовать элементы интерфейса
 func (t *Terminal) draw(gtx layout.Context, e app.FrameEvent) {
 	// Поле ввода
 	inputField := func(gtx layout.Context) layout.Dimensions {

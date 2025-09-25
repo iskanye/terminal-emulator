@@ -47,7 +47,22 @@ func main() {
 		"VFS: " + vfsPath + "\n" +
 		"Script: " + startScript)
 
-	ExecuteScript(startScript)
+	go ExecuteScript(startScript)
+
+	go func() {
+		for {
+			text := terminal.Read()
+			Println(text)
+
+			err := Parser(text)
+			if err != nil {
+				Println(err)
+			}
+
+			PrintInputField()
+		}
+	}()
+
 	app.Main()
 }
 
@@ -58,9 +73,4 @@ func setupVFS() error {
 	}
 	vfs.SetupExplorer(fs)
 	return nil
-}
-
-func exit() {
-	vfs.FileExplorer.Save(vfsPath)
-	os.Exit(0)
 }

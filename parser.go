@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"sync"
 	"terminal-emulator/programs"
+	"terminal-emulator/vfs"
 )
 
 // Парсер
@@ -73,4 +75,9 @@ func programFunc(program programs.Program) programs.Program {
 		close(out)
 		close(err)
 	}
+}
+
+func exit() {
+	vfs.FileExplorer.Save(vfsPath)
+	os.Exit(0)
 }
