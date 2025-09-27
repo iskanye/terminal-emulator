@@ -73,6 +73,7 @@ func (t *Terminal) Main() {
 			// Обрабатываем нажатие кнопки
 			if t.sendButton.Clicked(gtx) {
 				t.writeToBuffer()
+				continue
 			}
 
 			// Обрабатываем SubmitEvent
@@ -83,6 +84,7 @@ func (t *Terminal) Main() {
 				}
 				if _, ok := inputEvent.(widget.SubmitEvent); ok {
 					t.writeToBuffer()
+					break
 				}
 			}
 
@@ -101,6 +103,7 @@ func (t *Terminal) Main() {
 							t.historyIndex++
 						}
 					}
+					break
 				}
 			}
 
@@ -114,8 +117,8 @@ func (t *Terminal) Main() {
 }
 
 // Получить ввод пользователя
-func (t *Terminal) Read() string {
-	return <-t.buffer
+func (t *Terminal) Read() (string, error) {
+	return <-t.buffer, nil
 }
 
 // Записывает данные из поля ввода в буфер

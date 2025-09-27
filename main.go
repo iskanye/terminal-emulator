@@ -1,11 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"os"
+	"strings"
 	"terminal-emulator/vfs"
 
 	"gioui.org/app"
 )
+
+type reader interface {
+	Read() (string, error)
+}
 
 var (
 	username    = "iskanye"
@@ -21,6 +27,11 @@ func Print(a interface{}) {
 
 func Println(a interface{}) {
 	terminal.Println(a)
+}
+
+func Read() string {
+	text, _ := terminal.Read()
+	return text
 }
 
 // Поле ввода
@@ -47,16 +58,28 @@ func main() {
 		"VFS: " + vfsPath + "\n" +
 		"Script: " + startScript)
 
-	go ExecuteScript(startScript)
+	var reader reader = NewScript(startScript)
 
 	go func() {
 		for {
-			text := terminal.Read()
+			text, err := reader.Read()
+			if err != nil {
+				reader = terminal
+				continue
+			}
+
+			text = strings.TrimSpace(text)
 			Println(text)
 
-			err := Parser(text)
+			err = Parser(text)
 			if err != nil {
-				Println(err)
+				switch r := reader.(type) {
+				case *Script:
+					Println(fmt.Sprintf("line %d: ", r.CurrentLine) + " " + fmt.Sprint(err))
+					reader = terminal
+				case *Terminal:
+					Println(err)
+				}
 			}
 
 			PrintInputField()

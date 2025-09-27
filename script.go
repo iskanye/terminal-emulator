@@ -2,44 +2,32 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"os"
-	"strings"
 )
 
-// Исполнить скрипт
-func ExecuteScript(script string) {
-	defer PrintInputField()
-	var i int = 1
+// Тип скрипта
+type Script struct {
+	reader      *bufio.Reader
+	CurrentLine int
+}
+
+// Загрузить скрипт
+func NewScript(script string) *Script {
 	file, err := os.Open(script)
 
 	if err != nil {
 		Println(err)
-		return
-	}
-	defer file.Close()
-
-	reader := bufio.NewReader(file)
-
-	for {
-		input, err := reader.ReadString('\n')
-		input = strings.TrimSpace(input)
-
-		PrintInputField()
-		Println(input)
-
-		parserErr := Parser(input)
-		if parserErr != nil {
-			Println(fmt.Sprintf("line %d: ", i) + " " + fmt.Sprint(parserErr))
-			break
-		}
-
-		if err != nil {
-			break
-		}
-
-		i++
+		return nil
 	}
 
-	Println("\"" + script + "\" executed")
+	return &Script{
+		reader:      bufio.NewReader(file),
+		CurrentLine: 0,
+	}
+}
+
+// Читать строку скрипта
+func (s *Script) Read() (string, error) {
+	s.CurrentLine++
+	return s.reader.ReadString('\n')
 }
