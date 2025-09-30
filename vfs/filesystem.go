@@ -100,7 +100,6 @@ func (root *Node) ReadBytes() ([]byte, error) {
 	}
 
 	data, err := base64.RawStdEncoding.DecodeString(root.Content)
-
 	if err != nil {
 		return nil, err
 	}

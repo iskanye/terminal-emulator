@@ -2,8 +2,9 @@ package programs
 
 import (
 	"fmt"
-	"terminal-emulator/vfs"
 	"time"
+
+	"terminal-emulator/vfs"
 )
 
 func Touch(in chan string, out chan interface{}, stderr chan error) {

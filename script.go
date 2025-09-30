@@ -14,7 +14,6 @@ type Script struct {
 // Загрузить скрипт
 func NewScript(script string) *Script {
 	file, err := os.Open(script)
-
 	if err != nil {
 		Println(err)
 		return nil
