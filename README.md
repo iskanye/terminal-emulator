@@ -17,6 +17,7 @@
 ```bash
 git clone https://github.com/iskanye/terminal-emulator
 cd terminal-emulator
+go mod tidy
 go build -ldflags -H=windowsgui
 ```
 
