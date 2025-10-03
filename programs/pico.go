@@ -2,6 +2,7 @@ package programs
 
 import (
 	"fmt"
+	"strings"
 	"terminal-emulator/vfs"
 )
 
@@ -22,6 +23,6 @@ func Pico(in chan string, out chan interface{}, stderr chan error) {
 		return
 	}
 
-	file.Content = args[1]
+	file.Content = strings.Trim(args[1], "\"")
 	stderr <- nil
 }
