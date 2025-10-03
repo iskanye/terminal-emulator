@@ -13,13 +13,14 @@ func Help(in chan string, out chan interface{}, err chan error) {
 	}
 
 	out <- "LIST OF AVAILABLE COMMANDS:\n" +
-		"- cat [FILE] - reads file FILE\n" +
+		"- cat FILE - reads content from FILE\n" +
 		"- cd DIR - travels to DIR\n" +
 		"- du - shows disk usage\n" +
 		"- ls - shows list of entries in current directory\n" +
 		"- mkdir DIR - creates directory in current directory\n" +
 		"- rmdir DIR - remove directory from current directory\n" +
 		"- tail [-n NUM --lines NUM] FILE - reads last NUM lines of file FILE\n" +
-		"- touch FILE - updates FILE modification time. If FILE doesn`t exists, creates new empty file"
+		"- touch FILE - updates FILE modification time. If FILE doesn`t exists, creates new empty file\n" +
+		"- pico FILE \"CONTENT\" - rewrites FILE content with CONTENT"
 	err <- nil
 }

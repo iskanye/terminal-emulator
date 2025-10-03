@@ -23,6 +23,7 @@ var Programs = map[string]Program{
 	"rmdir": Rmdir,
 	"mkdir": Mkdir,
 	"help":  Help,
+	"pico":  Pico,
 }
 
 // Получет аргументы из канала
