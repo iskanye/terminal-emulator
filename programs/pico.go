@@ -22,5 +22,4 @@ func Pico(in chan string, out chan interface{}, stderr chan error) {
 	}
 
 	file.Content = args[1]
-	stderr <- nil
 }

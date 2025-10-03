@@ -32,6 +32,4 @@ func Cat(in chan string, out chan interface{}, stderr chan error) {
 			}
 		}
 	}
-
-	stderr <- nil
 }

@@ -28,6 +28,4 @@ func Touch(in chan string, out chan interface{}, stderr chan error) {
 	} else {
 		node.Modified = time.Now()
 	}
-
-	stderr <- nil
 }

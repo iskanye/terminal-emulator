@@ -18,6 +18,4 @@ func Du(in chan string, out chan interface{}, err chan error) {
 		output := fmt.Sprintf("%d    %s", i.GetSize(), i.Name)
 		out <- output
 	}
-
-	err <- nil
 }

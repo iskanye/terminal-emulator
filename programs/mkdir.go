@@ -23,6 +23,4 @@ func Mkdir(in chan string, out chan interface{}, stderr chan error) {
 		stderr <- err
 		return
 	}
-
-	stderr <- nil
 }

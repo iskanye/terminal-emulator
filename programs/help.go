@@ -22,5 +22,4 @@ func Help(in chan string, out chan interface{}, err chan error) {
 		"- tail [-n NUM --lines NUM] FILE - reads last NUM lines of file FILE\n" +
 		"- touch FILE - updates FILE modification time. If FILE doesn`t exists, creates new empty file\n" +
 		"- pico FILE \"CONTENT\" - rewrites FILE content with CONTENT"
-	err <- nil
 }
