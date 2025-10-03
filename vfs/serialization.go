@@ -6,26 +6,24 @@ import (
 )
 
 // Загрузить корневую ноду с xml файла
-func LoadFromXML(file string) (*Node, error) {
+func LoadFromXML(file string) *Node {
 	xmlData, err := os.ReadFile(file)
 	if err != nil {
-		_, err = os.Create(file)
-		if err != nil {
-			return nil, err
-		}
-
-		return NewRoot(), nil
+		_, _ = os.Create(file)
+		return NewRoot()
 	}
 
 	root := &Node{}
 	if err := xml.Unmarshal([]byte(xmlData), root); err != nil {
-		return nil, err
+		root := NewRoot()
+		root.SaveToXML(file)
+		return NewRoot()
 	}
 
 	// Создаём в каждой ноде указатель на родителя
 	root.restoreParent(nil)
 
-	return root, nil
+	return root
 }
 
 // Сохранить ветку в xml файл

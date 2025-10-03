@@ -49,12 +49,7 @@ func main() {
 	terminal = NewTerminal("VFS: " + vfsPath)
 	go terminal.Main()
 
-	err := setupVFS()
-	if err != nil {
-		Print(err)
-		return
-	}
-
+	setupVFS()
 	Println("Welcome to terminal emulator! (~by iskanye~)\n" +
 		"VFS: " + vfsPath + "\n" +
 		"Script: " + startScript)
@@ -90,11 +85,7 @@ func main() {
 	app.Main()
 }
 
-func setupVFS() error {
-	fs, err := vfs.LoadFromXML(vfsPath)
-	if err != nil {
-		return err
-	}
+func setupVFS() {
+	fs := vfs.LoadFromXML(vfsPath)
 	vfs.SetupExplorer(fs)
-	return nil
 }
