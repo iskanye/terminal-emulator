@@ -19,8 +19,8 @@ func Pico(in chan string, out chan interface{}, stderr chan error) {
 	file, err := vfs.FileExplorer.GetFile(args[0])
 	if err != nil {
 		stderr <- err
-		return
 	}
 
 	file.Content = args[1]
+	stderr <- nil
 }

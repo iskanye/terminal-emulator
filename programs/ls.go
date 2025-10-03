@@ -27,4 +27,6 @@ func Ls(in chan string, out chan interface{}, stderr chan error) {
 	for _, i := range result {
 		out <- i
 	}
+
+	stderr <- nil
 }

@@ -66,4 +66,6 @@ func Tail(in chan string, out chan interface{}, stderr chan error) {
 			}
 		}
 	}
+
+	stderr <- nil
 }

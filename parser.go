@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"sync"
 
 	"terminal-emulator/programs"
 	"terminal-emulator/vfs"
@@ -27,32 +28,43 @@ func Parser(input string) error {
 }
 
 func execute(program programs.Program, params []string) error {
+	wg := sync.WaitGroup{}
 	stdin := make(chan string)
 	stdout := make(chan interface{})
 	stderr := make(chan error)
 	execFunc := programFunc(program)
+	wg.Add(3)
 
 	// Поток передачи аргументов
 	go func() {
+		defer wg.Done()
 		for _, i := range params {
 			stdin <- i
 		}
 		close(stdin)
 	}()
 
-	// Поток самой программы
-	go execFunc(stdin, stdout, stderr)
+	go func() {
+		defer wg.Done()
+		execFunc(stdin, stdout, stderr)
+	}()
 
-	// Обработка ошибок
-	select {
-	case err := <-stderr:
-		return err
-	default:
-		// Вывод программы
+	// Вывод программы
+	go func() {
+		defer wg.Done()
+
 		for i := range stdout {
 			Println(i)
 		}
+	}()
+
+	// Обработка ошибок
+	if err := <-stderr; err != nil {
+		return err
 	}
+
+	// Ожидание завершения всех потоков
+	wg.Wait()
 
 	return nil
 }
