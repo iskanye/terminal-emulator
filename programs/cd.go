@@ -6,7 +6,7 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Cd(in chan string, out chan interface{}, err chan error) {
+func Cd(in chan string, out chan any, err chan error) {
 	args := ExtractArgs(in)
 
 	if len(args) == 0 {

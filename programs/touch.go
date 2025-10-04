@@ -7,7 +7,7 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Touch(in chan string, out chan interface{}, stderr chan error) {
+func Touch(in chan string, out chan any, stderr chan error) {
 	args := ExtractArgs(in)
 
 	if len(args) == 0 {

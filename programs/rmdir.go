@@ -6,7 +6,7 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Rmdir(in chan string, out chan interface{}, stderr chan error) {
+func Rmdir(in chan string, out chan any, stderr chan error) {
 	args := ExtractArgs(in)
 
 	if len(args) == 0 {

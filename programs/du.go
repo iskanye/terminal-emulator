@@ -6,7 +6,7 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Du(in chan string, out chan interface{}, err chan error) {
+func Du(in chan string, out chan any, err chan error) {
 	args := ExtractArgs(in)
 
 	if len(args) > 0 {

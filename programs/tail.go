@@ -8,7 +8,7 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Tail(in chan string, out chan interface{}, stderr chan error) {
+func Tail(in chan string, out chan any, stderr chan error) {
 	n := 10
 	args := ExtractArgs(in)
 

@@ -6,7 +6,7 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Ls(in chan string, out chan interface{}, stderr chan error) {
+func Ls(in chan string, out chan any, stderr chan error) {
 	var result []string
 	args := ExtractArgs(in)
 

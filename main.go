@@ -22,11 +22,11 @@ var (
 
 var terminal *Terminal
 
-func Print(a interface{}) {
+func Print(a any) {
 	terminal.Print(a)
 }
 
-func Println(a interface{}) {
+func Println(a any) {
 	terminal.Println(a)
 }
 

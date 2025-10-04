@@ -30,7 +30,7 @@ func Parser(input string) error {
 func execute(program programs.Program, params []string) error {
 	wg := sync.WaitGroup{}
 	stdin := make(chan string)
-	stdout := make(chan interface{})
+	stdout := make(chan any)
 	stderr := make(chan error)
 	execFunc := programFunc(program)
 	wg.Add(3)
@@ -71,7 +71,7 @@ func execute(program programs.Program, params []string) error {
 
 // Поток программы
 func programFunc(program programs.Program) programs.Program {
-	return func(in chan string, out chan interface{}, err chan error) {
+	return func(in chan string, out chan any, err chan error) {
 		program(in, out, err)
 		close(out)
 		close(err)
