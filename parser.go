@@ -27,39 +27,33 @@ func Parser(input string) error {
 	}
 }
 
-func execute(program programs.Program, params []string) error {
+func execute(program func(), params []string) error {
 	wg := sync.WaitGroup{}
-	stdin := make(chan string)
-	stdout := make(chan any)
-	stderr := make(chan error)
-	execFunc := programFunc(program)
+	programs.InitChannels()
 	wg.Add(3)
 
 	// Поток передачи аргументов
 	go func() {
 		defer wg.Done()
-		for _, i := range params {
-			stdin <- i
-		}
-		close(stdin)
+		programs.WriteToStdin(params)
 	}()
 
 	go func() {
 		defer wg.Done()
-		execFunc(stdin, stdout, stderr)
+		program()
 	}()
 
 	// Вывод программы
 	go func() {
 		defer wg.Done()
 
-		for i := range stdout {
+		for i := range programs.Stdout() {
 			Println(i)
 		}
 	}()
 
 	// Обработка ошибок
-	if err := <-stderr; err != nil {
+	if err := <-programs.Stderr(); err != nil {
 		return err
 	}
 
@@ -67,15 +61,6 @@ func execute(program programs.Program, params []string) error {
 	wg.Wait()
 
 	return nil
-}
-
-// Поток программы
-func programFunc(program programs.Program) programs.Program {
-	return func(in chan string, out chan any, err chan error) {
-		program(in, out, err)
-		close(out)
-		close(err)
-	}
 }
 
 func exit() {

@@ -6,16 +6,16 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Cd(in chan string, out chan any, err chan error) {
-	args := ExtractArgs(in)
+func Cd() {
+	args := ExtractArgs(stdin)
 
 	if len(args) == 0 {
-		err <- fmt.Errorf("no args")
+		stderr <- fmt.Errorf("no args")
 		return
 	} else if len(args) > 1 {
-		err <- fmt.Errorf("too many arguments")
+		stderr <- fmt.Errorf("too many arguments")
 		return
 	}
 
-	err <- vfs.FileExplorer.Travel(args[0])
+	stderr <- vfs.FileExplorer.Travel(args[0])
 }

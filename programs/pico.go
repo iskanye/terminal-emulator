@@ -6,8 +6,8 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Pico(in chan string, out chan any, stderr chan error) {
-	args := ExtractArgs(in)
+func Pico() {
+	args := ExtractArgs(stdin)
 
 	if len(args) > 2 {
 		stderr <- fmt.Errorf("too many arguments")

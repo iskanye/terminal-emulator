@@ -4,15 +4,15 @@ import (
 	"fmt"
 )
 
-func Help(in chan string, out chan any, err chan error) {
-	args := ExtractArgs(in)
+func Help() {
+	args := ExtractArgs(stdin)
 
 	if len(args) != 0 {
-		err <- fmt.Errorf("too many arguments")
+		stderr <- fmt.Errorf("too many arguments")
 		return
 	}
 
-	out <- "LIST OF AVAILABLE COMMANDS:\n" +
+	stdout <- "LIST OF AVAILABLE COMMANDS:\n" +
 		"- cat FILE - reads content from FILE\n" +
 		"- cd DIR - travels to DIR\n" +
 		"- du - shows disk usage\n" +
@@ -22,5 +22,5 @@ func Help(in chan string, out chan any, err chan error) {
 		"- tail [-n NUM --lines NUM] FILE - reads last NUM lines of file FILE\n" +
 		"- touch FILE - updates FILE modification time. If FILE doesn`t exists, creates new empty file\n" +
 		"- pico FILE \"CONTENT\" - rewrites FILE content with CONTENT"
-	err <- nil
+	stderr <- nil
 }

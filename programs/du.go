@@ -6,18 +6,18 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Du(in chan string, out chan any, err chan error) {
-	args := ExtractArgs(in)
+func Du() {
+	args := ExtractArgs(stdin)
 
 	if len(args) > 0 {
-		err <- fmt.Errorf("too many arguments")
+		stderr <- fmt.Errorf("too many arguments")
 		return
 	}
 
 	for _, i := range vfs.FileExplorer.GetCurrent().Children {
 		output := fmt.Sprintf("%d    %s", i.GetSize(), i.Name)
-		out <- output
+		stdout <- output
 	}
 
-	err <- nil
+	stderr <- nil
 }

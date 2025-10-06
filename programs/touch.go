@@ -7,8 +7,8 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Touch(in chan string, out chan any, stderr chan error) {
-	args := ExtractArgs(in)
+func Touch() {
+	args := ExtractArgs(stdin)
 
 	if len(args) == 0 {
 		stderr <- fmt.Errorf("no args")

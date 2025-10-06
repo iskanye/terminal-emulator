@@ -6,9 +6,9 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Ls(in chan string, out chan any, stderr chan error) {
+func Ls() {
 	var result []string
-	args := ExtractArgs(in)
+	args := ExtractArgs(stdin)
 
 	if len(args) > 1 {
 		stderr <- fmt.Errorf("too many arguments")
@@ -25,7 +25,7 @@ func Ls(in chan string, out chan any, stderr chan error) {
 	}
 
 	for _, i := range result {
-		out <- i
+		stdout <- i
 	}
 
 	stderr <- nil

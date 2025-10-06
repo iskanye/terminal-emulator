@@ -8,9 +8,9 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Tail(in chan string, out chan any, stderr chan error) {
+func Tail() {
 	n := 10
-	args := ExtractArgs(in)
+	args := ExtractArgs(stdin)
 
 	if len(args) == 0 {
 		stderr <- fmt.Errorf("no args")
@@ -59,10 +59,10 @@ func Tail(in chan string, out chan any, stderr chan error) {
 		lines := strings.Split(content, "\n")
 
 		if len(lines) <= n {
-			out <- strings.TrimSpace(content)
+			stdout <- strings.TrimSpace(content)
 		} else {
 			for i := n; i > 0; i-- {
-				out <- lines[len(lines)-i]
+				stdout <- lines[len(lines)-i]
 			}
 		}
 	}
