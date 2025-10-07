@@ -2,7 +2,6 @@ package programs
 
 import (
 	"fmt"
-	"sync"
 	"terminal-emulator/vfs"
 	"testing"
 )
@@ -37,35 +36,17 @@ func setupVFS() {
 func TestLs(t *testing.T) {
 	out := make([]string, 0, 2)
 	correct := []string{"home", "etc"}
-	ls := Program(Ls)
-	wg := &sync.WaitGroup{}
+	ls := program(Ls)
 
 	setupVFS()
-	InitChannels()
-	wg.Add(3)
 
-	go func() {
-		defer wg.Done()
-		WriteToStdin([]string{})
-	}()
-
-	go func() {
-		defer wg.Done()
-		ls()
-	}()
-
-	go func() {
-		defer wg.Done()
-		if err := <-stderr; err != nil {
-			t.Errorf("unexpected error: %s", err)
-		}
-	}()
-
-	for i := range stdout {
+	err := Execute(ls, nil, func(i any) {
 		out = append(out, fmt.Sprint(i))
-	}
+	})
 
-	wg.Wait()
+	if err != nil {
+		t.Errorf("unexpected error: %s", err)
+	}
 
 	for i := range out {
 		if out[i] != correct[i] {
