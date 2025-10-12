@@ -28,7 +28,9 @@ func Cat() {
 			}
 
 			if content != "" {
-				stdout <- strings.TrimSpace(content)
+				for _, i := range strings.Split(strings.TrimSpace(content), "\n") {
+					stdout <- i
+				}
 			}
 		}
 	}

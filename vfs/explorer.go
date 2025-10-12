@@ -118,6 +118,10 @@ func (exp *Explorer) ListDir(path string) ([]string, error) {
 		return nil, err
 	}
 
+	if !dir.IsDirectory {
+		return nil, fmt.Errorf("%s is a file", path)
+	}
+
 	list := make([]string, 0)
 
 	for _, i := range dir.Children {

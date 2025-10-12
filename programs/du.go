@@ -15,7 +15,7 @@ func Du() {
 	}
 
 	for _, i := range vfs.FileExplorer.GetCurrent().Children {
-		output := fmt.Sprintf("%d    %s", i.GetSize(), i.Name)
+		output := fmt.Sprintf("%6d    %s", i.GetSize(), i.Name)
 		stdout <- output
 	}
 
