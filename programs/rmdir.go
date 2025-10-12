@@ -6,8 +6,8 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Rmdir(in chan string, out chan interface{}, stderr chan error) {
-	args := ExtractArgs(in)
+func Rmdir() {
+	args := ExtractArgs(stdin)
 
 	if len(args) == 0 {
 		stderr <- fmt.Errorf("no args")

@@ -48,13 +48,13 @@ func NewTerminal(title string) *Terminal {
 }
 
 // Вывести текст в поле вывода
-func (t *Terminal) Print(a interface{}) {
+func (t *Terminal) Print(a any) {
 	t.outputField.SetText(t.outputField.Text() + fmt.Sprint(a))
 	t.outputField.MoveCaret(len(t.outputField.Text()), len(t.outputField.Text()))
 }
 
 // Вывести текст в поле вывода
-func (t *Terminal) Println(a interface{}) {
+func (t *Terminal) Println(a any) {
 	t.Print(fmt.Sprint(a) + "\n")
 }
 

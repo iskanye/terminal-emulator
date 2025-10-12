@@ -4,26 +4,82 @@ package programs
 import (
 	"fmt"
 	"strings"
+	"sync"
 )
 
-// Исполняемая функции программы:
-// in - входной канал в который поступают аргументы программы;
-// out - выходной канал в который поступает результат работы программы;
-// err - канал исключений, при успешном выполнении в него поступает nil
-type Program func(in chan string, out chan interface{}, err chan error)
+// Входной канал в который поступают аргументы программы;
+var stdin chan string
+
+// Выходной канал в который поступает результат работы программы;
+var stdout chan any
+
+// Канал исключений, при успешном выполнении в него поступает nil
+var stderr chan error
 
 // Встроенные команды
-var Programs = map[string]Program{
-	"ls":    Ls,
-	"cd":    Cd,
-	"du":    Du,
-	"tail":  Tail,
-	"cat":   Cat,
-	"touch": Touch,
-	"rmdir": Rmdir,
-	"mkdir": Mkdir,
-	"help":  Help,
-	"pico":  Pico,
+var Programs = map[string]func(){
+	"ls":    program(Ls),
+	"cd":    program(Cd),
+	"du":    program(Du),
+	"tail":  program(Tail),
+	"cat":   program(Cat),
+	"touch": program(Touch),
+	"rmdir": program(Rmdir),
+	"mkdir": program(Mkdir),
+	"help":  program(Help),
+	"pico":  program(Pico),
+}
+
+// Выполнить программу
+func Execute(program func(), input []string, handleOutput func(any)) error {
+	// Инициализировать основные каналы программ
+	stdin = make(chan string)
+	stdout = make(chan any)
+	stderr = make(chan error)
+
+	wg := &sync.WaitGroup{}
+	wg.Add(3)
+
+	// Поток передачи аргументов
+	go func() {
+		defer wg.Done()
+		for _, i := range input {
+			stdin <- i
+		}
+		close(stdin)
+	}()
+
+	// Поток программы
+	go func() {
+		defer wg.Done()
+		program()
+	}()
+
+	// Вывод программы
+	go func() {
+		defer wg.Done()
+		for i := range stdout {
+			handleOutput(i)
+		}
+	}()
+
+	// Обработка ошибок
+	if err := <-stderr; err != nil {
+		return err
+	}
+
+	// Ожидание завершения всех потоков
+	wg.Wait()
+
+	return nil
+}
+
+func program(programFunc func()) func() {
+	return func() {
+		programFunc()
+		close(stdout)
+		close(stderr)
+	}
 }
 
 // Получет аргументы из канала

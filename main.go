@@ -22,22 +22,22 @@ var (
 
 var terminal *Terminal
 
-func Print(a interface{}) {
+func Print(a any) {
 	terminal.Print(a)
 }
 
-func Println(a interface{}) {
+func Println(a any) {
 	terminal.Println(a)
-}
-
-func Read() string {
-	text, _ := terminal.Read()
-	return text
 }
 
 // Поле ввода
 func PrintInputField() {
 	Print(username + ":" + vfs.FileExplorer.GetPosition() + "> ")
+}
+
+func setupVFS() {
+	fs := vfs.LoadFromXML(vfsPath)
+	vfs.SetupExplorer(fs)
 }
 
 func main() {
@@ -83,9 +83,4 @@ func main() {
 	}()
 
 	app.Main()
-}
-
-func setupVFS() {
-	fs := vfs.LoadFromXML(vfsPath)
-	vfs.SetupExplorer(fs)
 }

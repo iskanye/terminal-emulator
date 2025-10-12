@@ -7,8 +7,8 @@ import (
 	"terminal-emulator/vfs"
 )
 
-func Cat(in chan string, out chan interface{}, stderr chan error) {
-	args := ExtractArgs(in)
+func Cat() {
+	args := ExtractArgs(stdin)
 
 	if len(args) == 0 {
 		stderr <- fmt.Errorf("no args")
@@ -28,7 +28,9 @@ func Cat(in chan string, out chan interface{}, stderr chan error) {
 			}
 
 			if content != "" {
-				out <- strings.TrimSpace(content)
+				for _, i := range strings.Split(strings.TrimSpace(content), "\n") {
+					stdout <- i
+				}
 			}
 		}
 	}
