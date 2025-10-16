@@ -6,18 +6,29 @@
 ## Функционал
 
 * Команды `ls`, `cd`, `exit`, `du`, `tail`, `cat`, `touch`, `rmdir`, `mkdir` и `help`
+* Минималистичный текстовый редактор `pico` (в разработке)
 * Возможность настройки местоположения файловой системы и стартового скрипта
 * Виртуальная файловая система на основе xml-файла
 * Графический интерфейс
 
-## Сборка и запуск
+## Запуска
+
+Для запуска программы клонируем репозиторий, загружаем зависимости и запускаем эмулятор
+
+```bash
+git clone https://github.com/iskanye/terminal-emulator
+cd terminal-emulator
+go mod tidy
+go run .
+```
+
+## Сборка
 
 Для сборки запустить следующие команды
 
 ```bash
 git clone https://github.com/iskanye/terminal-emulator
 cd terminal-emulator
-go mod tidy
 go build -ldflags -H=windowsgui
 ```
 
